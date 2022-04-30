@@ -1,5 +1,7 @@
 # SPRBot
 
+Simple bot framework for the game SPR.io (to be renamed)
+
 ## Setup
 
 ```
@@ -14,7 +16,7 @@ Provide the server to connect to as an argument
 python3 main.py http://localhost:5000
 ```
 
-## Develop
+## Development
 
 Edit bot.py to edit the logic for the bot.
 Some placeholder logic for a simple bot is provided.
