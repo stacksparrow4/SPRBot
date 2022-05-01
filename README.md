@@ -13,7 +13,7 @@ pip install "python-socketio[asyncio_client]"
 Provide the server to connect to as an argument
 
 ```
-python3 main.py http://localhost:5000
+python3 main.py http://localhost:5000 BOTNAME
 ```
 
 ## Development

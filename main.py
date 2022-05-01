@@ -8,8 +8,6 @@ from bot import BotLogic
 from structures import Player, Powerup
 
 
-BOT_NAME = "bot_v2"
-
 sio = socketio.AsyncClient()
 
 logic = BotLogic()
@@ -34,7 +32,7 @@ async def update_game(game_state):
         alive = False
 
 
-async def main(target):
+async def main(target, botname):
     global alive
 
     await sio.connect(target)
@@ -42,7 +40,7 @@ async def main(target):
     while 1:
         print("Starting game!")
 
-        await sio.emit("game_init", BOT_NAME)
+        await sio.emit("game_init", botname)
 
         while alive:
             await asyncio.sleep(0.1)
@@ -56,13 +54,14 @@ async def main(target):
     await sio.disconnect()
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: python3 main.py http://target:port')
+    if len(sys.argv) != 3:
+        print('Usage: python3 main.py http://target:port BOTNAME')
         exit(1)
 
     target = sys.argv[1]
+    botname = sys.argv[2]
 
     try:
-        asyncio.run(main(target))
+        asyncio.run(main(target, botname))
     except KeyboardInterrupt:
         print("Exiting!")
