@@ -17,6 +17,19 @@ def can_eat(me: Player, them: Player) -> bool:
     return them.team == (me.team + 1) % NUM_TEAMS
 
 
+def find_closest(me: Player, targets):
+    shortest_dist = math.inf
+    closest = None
+    for t in targets:
+        dx = t.x - me.x
+        dy = t.y - me.y
+        dist = dx**2 + dy**2
+        if dist < shortest_dist:
+            shortest_dist = dist
+            closest = t
+    return closest
+
+
 class BotLogic:
     def __init__(self):
         self.dir = 0
@@ -25,24 +38,13 @@ class BotLogic:
         # Fallback if no powerup and no players, go in circle
         self.dir += 0.1
 
-        if not me.poweredUp:
-            # If any powerups, chase after the nearest one
-            shortest_dist = math.inf
-            closest_power = None
-            for power in powerups:
-                dx = power.x - me.x
-                dy = power.y - me.y
-                dist = dx**2 + dy**2
-                if dist < shortest_dist:
-                    shortest_dist = dist
-                    closest_power = power
+        target_players = list(filter(lambda x: can_eat(me, x), other_players))
+        target_powerups = [] if me.poweredUp else powerups
 
-            if not closest_power is None:
-                self.dir = head_towards(me, closest_power.x, closest_power.y)
+        targets = [*target_players, *target_powerups]
 
-        # If any players, priorities
-        for p in other_players:
-            if can_eat(me, p):
-                self.dir = head_towards(me, p.x, p.y)
+        closest = find_closest(me, targets)
+        if not closest is None:
+            self.dir = head_towards(me, closest.x, closest.y)
 
         return self.dir

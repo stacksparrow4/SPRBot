@@ -8,6 +8,8 @@ from bot import BotLogic
 from structures import Player, Powerup
 
 
+BOT_NAME = "bot_v2"
+
 sio = socketio.AsyncClient()
 
 logic = BotLogic()
@@ -40,7 +42,7 @@ async def main(target):
     while 1:
         print("Starting game!")
 
-        await sio.emit("game_init", "bot")
+        await sio.emit("game_init", BOT_NAME)
 
         while alive:
             await asyncio.sleep(0.1)
