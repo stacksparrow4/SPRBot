@@ -21,12 +21,12 @@ async def update_game(game_state):
     if not alive:
         return
 
-    players = list(map(lambda x: Player(
-        game_state["time"], x), game_state["players"]))
+    others = list(map(lambda x: Player(
+        game_state["time"], x), game_state["others"]))
     powerups = list(map(lambda x: Powerup(x), game_state["powerups"]))
-    if len(players) > 0 and players[-1].id == sio.get_sid():
+    if game_state["me"]["id"] == sio.get_sid():
         d = logic.choose_direction(
-            game_state["time"], players[-1], players[:-1], powerups, game_state["maze"])
+            game_state["time"], Player(game_state["time"], game_state["me"]), others, powerups, game_state["maze"])
         await sio.emit("update_direction", d)
     else:
         alive = False
